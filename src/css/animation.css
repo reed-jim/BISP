@@ -1,0 +1,14 @@
+.hide {
+    border: 0 !important;
+    max-height: 0 !important;
+    padding: 0 !important;
+}
+
+.hide::placeholder {
+    font-size: 0;
+}
+
+.un-hide {
+    width: 200px;
+    
+}

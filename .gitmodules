@@ -1,0 +1,9 @@
+[submodule "node_modules/BISP-Backend"]
+	path = node_modules/BISP-Backend
+	url = https://github.com/reed-jim/BISP-Backend
+[submodule "node_modules/bisp-backend"]
+	path = node_modules/bisp-backend
+	url = https://github.com/reed-jim/bisp-backend
+[submodule "src/bisp-backend"]
+	path = src/bisp-backend
+	url = https://github.com/reed-jim/bisp-backend
