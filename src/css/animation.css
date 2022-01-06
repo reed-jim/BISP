@@ -12,3 +12,21 @@
     width: 200px;
     
 }
+
+.user-btn {
+    transition: all 0.4s;
+}
+
+.user-btn:hover {
+    box-shadow: none !important;
+    width: 70%;
+}
+
+.feed-row {
+    transition: all 0.4s;
+    margin-left: 0;
+}
+
+.feed-row:hover {
+    margin-left: -36px;
+}

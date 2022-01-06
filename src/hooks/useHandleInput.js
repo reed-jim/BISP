@@ -28,7 +28,9 @@ import { useRef, useEffect } from "react";
 // }
 
 const useHandleInput = (initialValue) => {
-    let inputRef = useRef(null);
+    // need a useState to work
+    const [updateTime, update] = useState(0);
+    let inputRef = useRef(null); // persist when state changes, lose when reloading page
 
     const set = (val) => {
         inputRef.current = val;
@@ -36,6 +38,8 @@ const useHandleInput = (initialValue) => {
 
     const setPartial = (part, val) => {
         inputRef.current[part] = val;
+
+        update(updateTime + 1);
     }
 
     useEffect(() => set(initialValue), [])

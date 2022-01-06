@@ -1,66 +1,66 @@
-import { useState } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { Explorer } from './components/Explorer/index';
-import { Header } from './components/Header/Header';
-import { Admin } from './components/Admin';
-import { QuestionDashboard, QuestionCollectionDetail, QuestionDetail } from './components/Question/Question';
-import { AddQuestionManager } from './components/Question/addQuestion';
-import { AddModal } from './components/Modal/Modal';
+import { useState } from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { ExplorerRouter, Explorer, FriendList } from "./components/Explorer/Explorer";
+import { Header } from "./components/Header/Header";
+import { Admin } from "./components/Admin";
+import { QuestionRouter, QuestionDashboard, QuestionCollectionDetail, QuestionDetail } from "./components/Question/Question";
+import { AddQuestionManager } from "./components/Question/addQuestion";
+import { AddModal } from "./components/Modal/Modal";
 
-import { DropDown } from './components/Frame';
-import { ThemeProvider } from 'styled-components';
-import { darkTheme } from './components/style/theme';
+import { DropDown } from "./components/Frame";
+import { ThemeProvider } from "styled-components";
+import { darkTheme } from "./components/style/theme";
+import { UserRouter, QuestionCollectionManager } from "./components/User/User";
 
 export const App = () => {
-    const [theme, setTheme] = useState('dark');
+    const [theme, setTheme] = useState("dark");
 
     return (
         <ThemeProvider theme={darkTheme}>
-            {/* <button onClick={()=>setTheme('dark')} >Theme</button> */}
-            <Header />
-            {/* <DropDown />
-            <AddModal theme={theme} /> */}
-            
             <BrowserRouter>
+                <Header theme={theme} setTheme={setTheme} />
+
                 <Switch>
-                    <Route exact path='/exlorer'>
-                        <Explorer theme={theme} />
+                    <Route path="/explore">
+                        <ExplorerRouter theme={theme} />
                     </Route>
 
-                    <Route path='/question/add'>
+                    <Route path="/question/add">
                         <AddQuestionManager theme={theme} />
                     </Route>
 
-                    {/* <Route path='/question/add/?id=1464&question=5'>
+                    {/* <Route path="/question/add/?id=1464&question=5">
                         <QuestionDetail theme={theme} />
                     </Route> */}
 
-                    <Route path='/question/:id/:id'>
+                    {/* <Route path="/question/:id/:id">
                         <QuestionDetail theme={theme} />
                     </Route>
 
-                    <Route path='/question/:id'>
+                    <Route path="/question/:id">
                         <QuestionCollectionDetail theme={theme} />
+                    </Route> */}
+
+                    <Route path="/question">
+                        <QuestionRouter theme={theme} />
                     </Route>
 
-                    
 
-                    <Route path='/question'>
-                        <QuestionDashboard theme={theme} />
+
+                    <Route path="/user">
+                        <UserRouter theme={theme} />
                     </Route>
 
-                   
-                    
-                    <Route exact path='/'>
+                    <Route exact path="/">
                         {/* <LandingPage /> */}
                     </Route>
-                    <Route exact path='/admin'>
+
+                    <Route exact path="/admin">
                         <Admin />
                     </Route>
                 </Switch>
             </BrowserRouter>
 
-            {/* <Explorer theme={theme} /> */}
         </ThemeProvider>
     )
 }

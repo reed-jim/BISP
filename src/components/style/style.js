@@ -6,11 +6,11 @@ const Customizer = styled.div`
     overflow: ${props => props.o};
 
     position: ${props => props.pos};
-    top: ${props => props.top || 0};
+    top: ${props => props.top};
     right: ${props => props.right};
-    left: ${props => props.left || 0};
+    left: ${props => props.left};
 
-    background: ${props => props.bg || (props.getTheme ? props.theme.div : '')};
+    background: ${props => props.bg || "none"};
     color: ${props => props.cl};
     border: ${props => props.b};
     border-bottom: ${props => props.bb};
@@ -105,7 +105,7 @@ const BasicButton = styled.button`
     background: ${props => props.bg};
     color: ${props => props.cl};
     border: ${props => props.b || "none"};
-    border-radius: ${props => props.br || "0"};
+    border-radius: ${props => props.br};
     width: ${props => props.w};
     height: ${props => props.h};
     padding: ${props => props.p};
@@ -123,18 +123,24 @@ const StyledText = styled.p`
     display: ${props => props.d};
     background: ${props => props.bg || ""};
     color: ${props => props.cl || props.theme.text};
+    border: ${props => props.b};
     border-radius: ${props => props.br};
     width: ${props => props.w || "fit-content"};
     // height: 100%;
     max-width: 100%;
     font-size: ${props => props.fs};
     font-weight: ${props => props.fw};
-    font-family: system-ui;
+    font-family: sans-serif;
     // font-family: monospace;
     text-align: ${props => props.ta || 'center'};
     padding: ${props => props.p};   
     margin: ${props => props.m || "0"};
     z-index: ${props => props.z};
+
+    &:hover {
+        background: ${props=> props.hBg};
+        color: ${props => props.hc};
+    }
 `
 
 const StyledImage = styled.img`
@@ -165,7 +171,7 @@ const StyledInput = styled.input`
     font-weight: ${props => props.fw};
     width: ${props => props.w};
     height: ${props => props.h};
-    padding: ${props => props.p || "0 5px 0 5px"};
+    padding: ${props => props.p};
     margin: ${props => props.m};
 
     ::placeholder {
@@ -231,7 +237,9 @@ const mx_9 = "0 9px 0 9px";
 const my_9 = "9px 0 9px 0";
 const my_18 = "18px 0 18px 0";
 
+const m_l_a = "0 0 0 auto";
+
 export {
     br_5, p_5, p_9, p_18, p_36, px_9, px_18, py_9, py_18, py_36, m_9, mt_9, mr_5, mr_9, mr_18, mb_5, mb_9, mb_18, mb_36,
-    ml_9, mx_9, my_9, my_18
+    ml_9, mx_9, my_9, my_18, m_l_a
 };

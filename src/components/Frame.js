@@ -1,23 +1,24 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { CenteredFlex, BasicButton, StyledText, StyledImage, Centered, YCenteredRowFlex, Flex, ColumnFlex } from "./style/style";
 import { br_5, px_9 } from "./style/style";
 
-import { useCustomTheme } from '../hooks/useTheme';
+import { useCustomTheme } from "../hooks/useTheme";
 
 
 const StyledButton = (props) => {
     return (
         <BasicButton
-            bg={props.bg || 'transparent'} cl={props.cl} br={props.br} w={props.w} h={props.h}
-            p={props.p || px_9} m={props.m}
+            className={props.className}
+            bg={props.bg || "transparent"} b={props.b} br={props.br} w={props.w} h={props.h}
+            p={props.p} m={props.m}
             hb={props.hb} hc={props.hc}
             style={props.style}
             onClick={() => props.click()}
             ref={props.iref}
         >
             <Centered>
-                <StyledText fs={props.fs} fw='bold'>{props.text}</StyledText>
+                <StyledText cl={props.cl} hc={props.hc} fs={props.fs} fw="bold">{props.text}</StyledText>
             </Centered>
         </BasicButton>
     )
@@ -26,8 +27,8 @@ const StyledButton = (props) => {
 const IconButton = (props) => {
     return (
         <CenteredFlex bg={props.bg || "transparent"} br={props.br} w={props.w} h={props.h} hBg={props.hBg} onClick={() => props.click()}>
-            <BasicButton bg='transparent' cl={props.cl} h={props.iconH}>
-                <StyledImage h="100%" src={props.src} alt='' />
+            <BasicButton bg="transparent" cl={props.cl} h={props.iconH}>
+                <StyledImage h="100%" src={props.src} alt="" />
             </BasicButton>
         </CenteredFlex>
     )
@@ -40,15 +41,15 @@ const Badge = (props) => {
             p={props.p || px_9} m={props.m}
             hBg={props.hb} hc={props.hc}
         >
-            <StyledText fs={props.fs || '14px'} fw={props.fw}>{props.text}</StyledText>
+            <StyledText fs={props.fs || "14px"} fw={props.fw}>{props.text}</StyledText>
         </CenteredFlex>
     )
 }
 
 const StyledRouteLink = (props) => {
     return (
-        <Link to={props.to} style={{ textDecoration: 'none' }}>
-            <Badge bg={props.bg} cl={props.cl} br={br_5} w={props.w} h={props.h} p={props.p} hb={props.hb} hc={props.hc} fw='bold'
+        <Link to={props.to} style={{ textDecoration: "none" }}>
+            <Badge bg={props.bg} cl={props.cl} br={br_5} w={props.w} h={props.h} p={props.p} hb={props.hb} hc={props.hc} fw="bold"
                 text={props.text}
             />
         </Link>
@@ -58,10 +59,10 @@ const StyledRouteLink = (props) => {
 const SvgIcon = (props) => {
     let size = props.w || props.h;
     size *= 1 * props.scale;
-    size += 'px';
+    size += "px";
 
     return (
-        <CenteredFlex bg='none' m={props.m} onClick={props.click}>
+        <CenteredFlex bg="none" m={props.m} onClick={props.click}>
             {props.svg}
             <img
                 style={{
@@ -70,7 +71,7 @@ const SvgIcon = (props) => {
                     width: size,
                     height: size,
                 }}
-                alt=''
+                alt=""
             />
         </CenteredFlex>
     )
@@ -79,7 +80,8 @@ const SvgIcon = (props) => {
 const Text = (props) => {
     return (
         <StyledText
-            className={props.class} bg={props.bg} cl={props.cl} br={props.br} fs={props.fs} fw={props.fw} ta={props.ta} w={props.w} p={props.p} m={props.m} style={props.style}
+            className={props.className} bg={props.bg} hBg={props.hBg} cl={props.cl} hc={props.hc} b={props.b} br={props.br}
+            fs={props.fs} fw={props.fw} ta={props.ta} w={props.w} p={props.p} m={props.m} style={props.style}
         >
             {props.text}
         </StyledText>
@@ -88,15 +90,16 @@ const Text = (props) => {
 
 const TextWithIcon = (props) => {
     return (
-        <YCenteredRowFlex bg={props.cbg || 'none'} g='9px'>
-            <SvgIcon svg={props.svg} cpId={props.id} bg='#fff' w={512} scale={0.05} />
+        <YCenteredRowFlex bg={props.cbg || "none"} g="9px">
+            <SvgIcon svg={props.svg} cpId={props.id} bg="#fff" w={512} scale={0.05} />
 
-            <Text
-                bg={props.bg} br={props.br}
-                cl={props.cl} fs={props.fs} fw={props.fw} ta={props.ta}
+            <Flex
+                bg={props.bg} cl={props.cl} br={props.br}
                 w={props.w} p={props.p} m={props.m}
-                text={props.text}
-            />
+                style={{ fontSize: props.fs, fontWeight: props.fw, textAlign: props.ta }}
+            >
+                {props.text}
+            </Flex>
         </YCenteredRowFlex>
     )
 }
@@ -112,22 +115,25 @@ const DropDown = (props) => {
     const chooseOption = (value) => {
         props.getValue(value);
         choose(value);
+        expand(false);
     }
 
-    // const themeCollection = useCustomTheme(dropDownThemeCollections, 'light');
+    const tc = props.themeCollection;
 
     return (
-        <ColumnFlex pos="relative" g={isExpand ? '9px' : '0'} tr='gap 0.5s'>
-            <StyledButton bg='#555' br='5px' fs='16px' w='fit-content' p='9px' hb='#666' text={chosen || props.btnName} click={() => expand(!isExpand)} />
+        <ColumnFlex pos="relative" m={props.m} g={isExpand ? "9px" : "0"} tr="gap 0.5s">
+            <StyledButton bg={tc[0]} cl={tc[2]} br="5px" fs="16px" p="9px" hb={tc[1]}
+                text={chosen || props.btnName} click={() => expand(!isExpand)}
+            />
 
-            <ColumnFlex pos="absolute" top='40px' bg='#888' br='5px' h='fit-content' style={{ maxHeight: isExpand ? '200px' : '0' }} o='hidden' tr='all 0.5s'>
+            <ColumnFlex pos="absolute" top="110%" br="5px" w="100%" h="" o="auto" z="2" tr="all 0.3s"
+                style={{ transform: isExpand ? "scaleY(1)" : "scaleY(0)", transformOrigin: "top", maxHeight: "150px" }}>
                 {
-                    Array(3).join().split(',').map(
+                    props.options.map(
                         (item, i) =>
-                            // <Text key={i} bg='#333' p='18px' text="Test" onClick={()=>console.log('das')} /> 
-                            <Flex key={i} bg='#333' cl="#fff" p='18px' hBg="#444" onClick={() => chooseOption('a value')}>
-                                Test
-                            </Flex>
+                            <Centered key={i} bg={tc[0]} w="100%" p="18px" hBg={tc[1]} onClick={() => chooseOption(item)}>
+                                <Text cl={tc[2]} text={item} />
+                            </Centered>
                     )
                 }
             </ColumnFlex>
@@ -135,4 +141,16 @@ const DropDown = (props) => {
     )
 }
 
-export { StyledButton, IconButton, Badge, StyledRouteLink, SvgIcon, Text, TextWithIcon, DropDown }
+const CenteredText = (props) => {
+    return (
+        <Flex
+            bg={props.bg} cl={props.cl} br={props.br}
+            w={props.w} p={props.p} m={props.m}
+            style={{ fontFamily: "system-ui", fontSize: props.fs, fontWeight: props.fw, textAlign: props.ta }}
+        >
+            {props.text}
+        </Flex>
+    )
+}
+
+export { StyledButton, IconButton, Badge, StyledRouteLink, SvgIcon, Text, CenteredText, TextWithIcon, DropDown }

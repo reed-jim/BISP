@@ -1,91 +1,258 @@
-import { CenteredFlex, ColumnFlex, Flex, CenteredColumnFlex, XCenteredColumnFlex, YCenteredRowFlex } from "../style/style";
-import { StyledButton, Text, TextWithIcon } from "../Frame";
-import { dogs } from "../../test/SampleData";
-import { useState } from "react";
-import { questionCollections } from "../../test/SampleData";
+import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
-import { appendPath } from "../../js/util";
+import "../../css/style.css";
+import { useHandleInput } from "../../hooks/useHandleInput";
+import { useQuery } from "../../hooks/useQuery";
+import { appendParam, getSessionStorage, pushPath, setSessionStorage, isNullOrUndefined } from "../../js/util";
+import { getLastCollectionId, getQuestionCollections, getQuestions, sortBy } from "../../services/question";
+import { CollectionResult } from "../../services/result.service";
+import { CloseIcon } from '../../svg';
+import { dogs } from "../../test/SampleData";
+import { DropDown, StyledButton, SvgIcon, Text } from "../Frame";
+import { Centered, ColumnFlex, Flex, XCenteredColumnFlex, YCenteredRowFlex } from "../style/style";
+
+
+
+const COLLECTION_PER_PAGE = 8;
 
 const themeCollections = {
-    // mapping: container, header, button
-    light: ["#888", "#aaa", "#666"],
-    dark: ["#222", "#444", "#aaa"]
+    light: {
+        questionRouter: ["#fff"],
+        questionDashboard: ["#ddd", "#333"],
+        qcDetail: ["#ddd", "#333", "#222"],
+        question_list_item: ["#429241", "#ddd", "#ccc", "#222"],
+        filterModal: ["#ddd", "#333", "#ccc"],
+        questionDetail: ["#ddd", "#222", "#777", "#222", "#ccc"]
+    },
+    dark: {
+        questionRouter: ["#333"],
+        questionDashboard: ["#444", "#fff"],
+        qcDetail: ["#444", "#555", "#fff"],
+        question_list_item: ["#429241", "#444", "#555", "#fff"],
+        filterModal: ["#444", "#fff", "#555"],
+        questionDetail: ["#444", "#fff", "#666", "#bbb", "#555"]
+    }
+}
+
+// Note: qc5 = question_collection with id = 5
+// localhost:3000/eran/collection?id=0&question=all || localhost:3000/eran/collection?id=0
+// localhost:3000/eran/collection?id=0&question=6
+
+const QuestionRouter = (props) => {
+    const query = useQuery();
+    const theme = props.theme;
+    const tc = themeCollections[props.theme].questionRouter;
+
+    const collectionId = query.get("collection");
+    const questionId = query.get("index");
+
+    let component;
+
+    if (collectionId == null && questionId == null) {
+        component = <QuestionDashboard theme={theme} />
+    }
+    else if (collectionId != null && questionId == null) {
+        component = <QuestionCollectionDetail theme={theme} />
+    }
+    else {
+        component = <QuestionDetail theme={theme} />
+    }
+
+    return (
+        <XCenteredColumnFlex bg={tc[0]} mh="100vh">
+            {component}
+        </XCenteredColumnFlex>
+    )
 }
 
 const QuestionDashboard = (props) => {
+    const history = useHistory();
+    const [isFilterOpen, openFilter] = useState(false);
     const theme = props.theme;
-    const themeCollection = themeCollections[theme];
+    const tc = themeCollections[theme].questionDashboard;
+
+    const getEndIndex = (start) => {
+        const last = getSessionStorage("last_qc_id");
+        let end = start + COLLECTION_PER_PAGE - 1;
+
+        if (last < end) {
+            end = last;
+        }
+
+        return end;
+    }
+
+    const renderQc = (start = 0) => {
+        // const objs = getSessionStorage(`qc_from${start}_to${getEndIndex(start)}`)
+        const objs = getSessionStorage("questionCollections");
+
+        const arr = [];
+
+        if (objs) {
+            Object.entries(objs).forEach(([, value],) => arr.push(value));
+
+            return arr.map((item, i) => <QuestionCollection key={i}
+                id={item["_id"]} title={item["title"]} description={item["description"]}
+                difficulty={i} creator={item["author"]} date={item["date"]} total={item["total"]}
+                theme={theme}
+            />)
+        }
+        else {
+            // return "No collection";
+            return <QuestionCollection difficulty={0} theme={theme} />
+        }
+    }
+
+    useEffect(
+        () => {
+            getLastCollectionId().then(
+                res => {
+                    const lastId = res.data.index;
+
+                    const storedLastId = getSessionStorage("last_qc_id");
+
+                    if (storedLastId == null) {
+                        setSessionStorage(`last_qc_id`, lastId);
+                    }
+                    else {
+                        if (lastId != storedLastId) {
+                            setSessionStorage(`last_qc_id`, lastId);
+                        }
+                    }
+
+                    let end = COLLECTION_PER_PAGE - 1;
+
+                    if (lastId < end) {
+                        end = lastId;
+                    }
+                    // sort + limit
+
+                    // sortBy("total").then(
+                    //     res => {
+                    //         const qcs = getSessionStorage("questionCollections") || {};
+
+                    //         for (const key in res.data) {
+                    //             const value = res.data[key];
+                    //             const id = value._id;
+
+                    //             qcs[id] = value;
+                    //         }
+                    //         setSessionStorage("questionCollections", qcs);    
+                    //     }
+                    // )
+
+
+                    // if (storedLastId != lastId || storedLastId == null) {
+                    //     getQuestionCollections(0, end).then(
+                    //         res => {
+                    //             setSessionStorage(`qc_from0_to${end}`, res.data);
+                    //             setSessionStorage(`last_qc_id`, last);
+                    //         }
+                    //     )
+                    // }
+                }
+            )
+
+        }, []
+    )
 
     return (
-        <XCenteredColumnFlex bg={themeCollection[0]} mh="100vh">
-            {/* <ColumnFlex bg={themeCollection[0]} br="5px" w="60%" p="18px"></ColumnFlex> */}
+        <ColumnFlex w="70%" p="18px" g="18px" >
 
-            <ColumnFlex w="70%" p="18px" g="18px" >
+            <Flex g="18px">
 
-                <Flex g="18px">
+                <Flex b={`2px solid ${tc[0]}`} br="5px" w="70%" h="150px">
 
-                    <Flex b="2px solid #444" br="5px" p="18px" w="70%" h="150px">
-
-                    </Flex>
-
-                    <Flex b="2px solid #444" br="5px" p="18px" h="150px" gr="1">
-
-                    </Flex>
-                    {/* Limited */}
-                    {/* History */}
                 </Flex>
 
-                <Text text="Collections" />
+                <Flex b={`2px solid ${tc[0]}`} br="5px" w="30%" h="150px" gr="1">
 
-                <Flex g="18px">
-                    <ColumnFlex w="70%" g="18px">
-
-                        {
-                            questionCollections.map(
-                                (item, i) => <QuestionCollection key={i} title={item[0]} id={1464 + i}
-                                    difficulty={item[1]} creator={item[2]} descripton={item[3]} total={item[4]}
-
-                                    theme={theme} />
-                            )
-                        }
-
-                    </ColumnFlex>
-
-                    <ColumnFlex gr={1}>
-                        <StyledButton bg="#80f" br="5px" p="9px" text="Add" />
-                    </ColumnFlex>
                 </Flex>
+                {/* Limited */}
+                {/* History */}
+            </Flex>
 
-            </ColumnFlex>
+            <Flex g="18px">
+                <ColumnFlex w="70%" g="18px">
 
-        </XCenteredColumnFlex>
+                    <Centered>
+                        <Text cl={tc[1]} fw="bold" p="9px" text="Collections" />
+
+                        {/* <StyledButton bg={tc[0]} br="5px" p="9px" m="0 0 0 auto" text="Add"
+                            click={() => pushPath(history, "add")}
+                        /> */}
+                    </Centered>
+
+                    <YCenteredRowFlex g="9px">
+                        <StyledButton bg={tc[0]} br="5px" p="9px" m="0 0 0 auto" text="Add"
+                            click={() => pushPath(history, "add")}
+                        />
+                        <StyledButton bg={tc[0]} br="5px" p="9px" text="Filter"
+                            click={() => openFilter(true)}
+                        />
+                        <StyledButton bg={tc[0]} br="5px" p="9px" text="Sort"
+                            click={() => pushPath(history, "add")}
+                        />
+                    </YCenteredRowFlex>
+
+                    {
+                        renderQc()
+                    }
+
+                </ColumnFlex>
+
+                <ColumnFlex w="30%" g="18px">
+                    <Centered>
+                        <Text cl={tc[1]} fw="bold" p="9px 0" text="History" />
+                    </Centered>
+
+                    <ColumnFlex>
+                        {/* <Text text="Your history goes here" /> */}
+
+                        <Flex pos="relative">
+                            <Flex bg="linear-gradient(45deg, #7838a9, #286f90)" br="5px" w="100%" h="150px" />
+                            {/* <StyledImage src="https://cdn.pixabay.com/photo/2016/11/29/05/45/astronomy-1867616__340.jpg"
+                            w="100%"
+                        /> */}
+                            <Text className="absolute-centered" cl={tc[1]} fs="24px" fw="bold" p="9px 0" text="No record" />
+                        </Flex>
+                    </ColumnFlex>
+                </ColumnFlex>
+
+            </Flex>
+
+            {isFilterOpen && <FilterModal theme={theme} close={() => openFilter(false)} />}
+
+        </ColumnFlex>
     )
 }
 
 const QuestionCollection = (props) => {
     const history = useHistory();
-    const themeCollection = themeCollections[props.theme];
+    const tc = themeCollections[props.theme].qcDetail;
 
     return (
-        <ColumnFlex bg={themeCollection[1]} br="5px" p="18px" g="18px" hBg="#555" onClick={() => appendPath(history, props.id)}>
+        <ColumnFlex bg={tc[0]} br="5px" p="18px" g="18px" hBg={tc[1]}
+            onClick={() => appendParam(history, `collection=${props.id}`)}
+        >
             <ColumnFlex g="18px">
                 {/* Title */}
                 <YCenteredRowFlex g="9px">
-                    <Text fs="20px" fw="bold" text={props.title} />
+                    <Text cl={tc[2]} fs="20px" fw="bold" p="5px" text={props.title} />
                     <Difficulty difficulty={props.difficulty} />
                 </YCenteredRowFlex>
 
                 {/* Author & Date */}
                 <Flex g="18px">
-                    <Text text={props.creator} />
-                    <Text cl={themeCollection[2]} text="24/5/2022" />
+                    <Text cl={tc[2]} text={props.creator} />
+                    <Text cl={tc[2]} text={props.date} />
                 </Flex>
                 {/* Description */}
-                <Text cl={themeCollection[2]} ta="justify" text={props.descripton} />
+                <Text cl={tc[2]} ta="justify" text={props.descripton} />
 
                 <YCenteredRowFlex g="9px">
-                    <Text fs="24px" fw="bold" p="0 9px 0 0" text={props.total + " Questions"} style={{ borderRight: "2px solid #fff" }} />
-                    <Text fs="24px" fw="bold" text="999" />
+                    <Text cl={tc[2]} fs="24px" fw="bold" p="0 9px 0 0" text={props.total + " Questions"} style={{ borderRight: "2px solid #fff" }} />
+                    <Text cl={tc[2]} fs="24px" fw="bold" text="999" />
                     {/* <StyledButton br="5px" fs="24px" p="9px" m="0 0 0 auto" text="Eeen" /> */}
 
                 </YCenteredRowFlex>
@@ -96,74 +263,227 @@ const QuestionCollection = (props) => {
     )
 }
 
-
 const QuestionCollectionDetail = (props) => {
-    const theme = props.theme;
-    const themeCollection = themeCollections[theme];
+    const query = useQuery();
 
-    const { id } = useParams();
+    const collectionId = query.get("collection");
+    const theme = props.theme;
+    const tc = themeCollections[theme].qcDetail;
+    const [t, setT] = useState(false);
+
+    const renderQuestions = () => {
+        const questions = getSessionStorage(`qc${collectionId}`);
+        
+        if (questions && t) {
+            return Object.values(questions).map(
+                (item, i) => <QuestionListItem key={i} index={i} id={item._id} question={item.question}
+                    isPassed={getSessionStorage("r").includes(item._id) ? true : false} theme={theme}
+                />
+            )
+        }
+        else {
+            return <Text text="No question" />
+        }
+    }
+
+    useEffect(
+        () => {
+            const cr = new CollectionResult();
+            cr.get(0, collectionId).then(
+                res => {
+                    
+                    const results = res.data.results;
+                    
+                    setSessionStorage("r", results);
+
+                    setT(true);
+                }
+            )
+            if (!getSessionStorage(`qc${collectionId}`)) {
+                getQuestions(collectionId).then(
+                    res => setSessionStorage(`qc${collectionId}`, res.data)
+                )
+
+                const questions = getSessionStorage(`qc${collectionId}`);
+
+                // solution 2:
+                // collectionAnswer: { _id, userid, collectionId, answers }
+
+                
+
+                
+
+                // getUser(99).then(
+                //     (user) => {
+                //         const len = questions.length;
+                //         const collectionAnswers = user.collectionAnswers;
+                //         const collectionAnswer = Array(len).fill(false);
+                //         // binary search
+                //         // linear search
+                //         for (let i = 0; i < collectionAnswers.length; i++) {
+                //             if (collectionAnswers[i].collectionId == collectionId) {
+                //                 const answers = collectionAnswers[i].answer;
+                //                 for (let j = 0; j < len; j++) {
+                //                     if (j < answers.length) {
+                //                         if (answers[j] == true) {
+                //                             // true
+                //                         }
+                //                     }
+                //                 }
+                //                 setSessionStorage(`qc_answer_${collectionId}`, answers);
+                //                 break;
+                //             }
+                //         }
+                //     }
+                // )
+            }
+            
+        }, []
+    )
 
     return (
-        <XCenteredColumnFlex bg={themeCollection[0]} mh="100vh" g="18px">
+        <ColumnFlex w="50%" p="18px" g="9px" >
+            <Text cl={tc[1]} fs="36px" fw="bold" text={`Collection ${collectionId}`} />
 
+            {
+                renderQuestions()
+            }
 
-            <ColumnFlex w="70%" p="18px" g="18px" >
-                <Text fs="36px" fw="bold" text={`Collection ${id}`} />
-
-                {
-                    ["0", "1", "2"].map(
-                        (item, i) => <QuestionListItem key={i} id={i} />
-                    )
-                }
-
-
-            </ColumnFlex>
-
-        </XCenteredColumnFlex>
+        </ColumnFlex>
     )
 }
 
 const QuestionListItem = (props) => {
     const history = useHistory();
+    const tc = themeCollections[props.theme].question_list_item;
 
     return (
-        <YCenteredRowFlex bg="#444" br="5px" p="9px" g="9px" hBg="#333" onClick={() => appendPath(history, props.id)}>
-            <Text p="0 9px 0 0" text="0" style={{ borderRight: "2px solid #999" }} />
-            <Text text="Content 0" />
-
-
+        <YCenteredRowFlex bg={props.isPassed ? tc[0] : tc[1]} br="5px" p="9px" g="9px" hBg={tc[2]}
+            onClick={() => appendParam(history, `index=${props.id}`)}>
+            <Text cl={tc[3]} p="0 9px 0 0" text={props.index} style={{ borderRight: "2px solid #999" }} />
+            <Text cl={tc[3]} text={props.question} />
         </YCenteredRowFlex>
     )
 }
 
-const QuestionDetail = () => {
-    const [chosen, choose] = useState(-1);
+const QuestionDetail = (props) => {
+    const query = useQuery();
+    const [choice, choose] = useState(-1);
+    const [isCorrect, setIsCorrect] = useState(null);
+    const [isSubmitModal, openSubmitModal] = useState(false);
+
+    const collectionId = query.get("collection");
+    const questionId = query.get("index");
+    const detail = getSessionStorage(`qc${collectionId}`)[questionId];
+
+    const tc = themeCollections[props.theme].questionDetail;
+
+    const submit = () => {
+        if (String.fromCharCode(65 + choice) == detail.correctAnswer) {
+            const cr = new CollectionResult();
+
+            const userId = 0;
+
+            cr.get(userId, collectionId).then(
+                res => {
+                    const results = res.data.results;
+
+                    if (results) {
+                        let newCollectionResult = res.data;
+                        newCollectionResult.results.push(questionId);
+                    }
+                    else {
+                        cr.lastId().then(
+                            res => {
+                                const collectionResult = {
+                                    id: res.data.index,
+                                    userId: userId,
+                                    collectionId: Number(collectionId),
+                                    results: [questionId]
+                                }
+
+                                cr.add(collectionResult);
+                            }
+                        )
+                    }
+                }
+            )
+        }
+        else {
+            alert("Wrong")
+        }
+    }
 
     return (
-        <ColumnFlex bg="#444" br="5px" w="60%" p="18px" g="18px">
-            <Text fs="20px" fw="bold" text="Question" style={{ paddingBottom: "18px", borderBottom: "2px solid #666" }} />
+        <ColumnFlex bg={tc[0]} br="5px" w="50%" p="18px" g="18px">
+            <Text cl={tc[1]} fs="20px" fw="bold" text={detail.question} style={{ paddingBottom: "18px", borderBottom: "2px solid #666" }} />
 
             <ColumnFlex>
 
                 {
-                    dogs.map(
+                    Object.values(detail.answers).map(
                         (item, i) =>
-                            <YCenteredRowFlex key={i} bg={chosen == i ? "#00000030" : ""} p="18px" g="18px" hBg="#00000030"
+                            <YCenteredRowFlex
+                                key={i} bg={choice == i ? "#00000030" : ""} p="18px" g="18px" hBg="#00000030"
                                 style={{ borderBottom: "2px solid #666" }}
                                 onClick={() => choose(i)}
                             >
-                                <Text cl="#999" fs="20px" fw="bold" text={String.fromCharCode(65 + i)} />
-                                {/* <StyledInput type="checkbox" /> */}
-                                <Text ta="justify" text={item} />
+                                <Centered cl={tc[3]} style={{ fontSize: "28px", fontWeight: "bold" }}>
+                                    {String.fromCharCode(65 + i)}
+                                </Centered>
 
+                                <Text cl={tc[1]} ta="justify" text={item} />
                             </YCenteredRowFlex>
                     )
                 }
 
             </ColumnFlex>
 
-            <StyledButton bg="#333" br="5px" p="9px" m="0 0 0 auto" text="Submit" />
+            <YCenteredRowFlex>
+                {isCorrect && <AnswerState />}
+                <StyledButton hb={tc[4]} cl={tc[3]} br="5px" p="9px" m="0 0 0 auto" text="Submit" click={() => openSubmitModal(true)} />
+            </YCenteredRowFlex>
+
+            {isSubmitModal && <PromptModal close={() => openSubmitModal(false)} submit={submit} />}
         </ColumnFlex>
+    )
+}
+
+const AnswerState = () => {
+    return (
+        <YCenteredRowFlex>
+            <Text text="Correct" />
+            <StyledButton text="Back to collection" />
+        </YCenteredRowFlex>
+    )
+}
+
+const PromptModal = (props) => {
+
+    const submit = (params) => {
+        // if (props.choice == 0) {
+        //     props.setIsCorrect(true);
+        //     // saveCorrectAnswer
+        // }
+        // else {
+        //     props.setIsCorrect(false);
+        // }
+        // props.close();
+        // props.setIsCorrect(true);
+        props.close();
+        props.submit();
+    }
+
+    return (
+        <Centered pos="absolute" top="0" left="0" bg="#000000c0" w="100%" h="100%">
+            <XCenteredColumnFlex bg="#555" br="5px" w="70%" p="9px" g="18px">
+                <Text text="sure?" />
+                <Flex g="18px">
+                    <StyledButton bg="#333" text="Ok" click={submit} />
+                    <StyledButton bg="#333" text="Cancel" click={props.close} />
+                </Flex>
+            </XCenteredColumnFlex>
+        </Centered>
     )
 }
 
@@ -171,12 +491,52 @@ const Difficulty = (props) => {
     const dif = props.difficulty;
 
     const difficulties = [
-        ["#84fff4", "Very Easy"], ["#6eff54", "Easy"], ["#ff5454", "Hard"]
+        ["#559c3d", "Very Easy"], ["#0264ca", "Easy"], ["#ff5454", "Hard"]
     ]
 
     return (
-        <Text bg={difficulties[dif][0]} cl="#222" br="5px" fs="20px" p="5px" fw="bold" text={difficulties[dif][1]} />
+        <Text bg={difficulties[dif][0]} cl="#fff" br="5px" fs="20px" p="5px" fw="bold" text={difficulties[dif][1]} />
     )
 }
 
-export { QuestionDashboard, QuestionDetail, QuestionCollectionDetail }
+const FilterModal = (props) => {
+    const { input, getInput } = useHandleInput(["", "", ""]);
+    const [updateTime, update] = useState(0)
+    const tc = themeCollections[props.theme].filterModal;
+
+    const getDropDownInput = (i, val) => {
+        getInput(i, val);
+        update(updateTime + 1);
+    }
+
+    return (
+        <Centered pos="absolute" top="0" left="0" bg="#000000c0" w="100%" h="100%">
+            <ColumnFlex bg={tc[0]} br="5px" w="40%" p="9px" g="9px">
+                <YCenteredRowFlex>
+                    <Text cl={tc[1]} fs="24px" fw="bold" text="Filter" />
+
+                    <SvgIcon svg={CloseIcon({ scale: 0.004 })} cpId='close' bg={tc[1]} w={512} scale={0.04} m='0 0 0 auto'
+                        click={props.close}
+                    />
+                </YCenteredRowFlex>
+                <ColumnFlex g="9px">
+                    {
+                        Array(3).fill(0).map(
+                            (item, i) =>
+                                <YCenteredRowFlex key={i} bg={tc[2]} br="5px" p="9px">
+                                    <Text cl={tc[1]} fw="bold" text="Difficulty" />
+                                    <DropDown btnName="Choose" m="0 0 0 auto" setTo={i} getValue={getDropDownInput} />
+                                </YCenteredRowFlex>
+                        )
+                    }
+                </ColumnFlex>
+                <Centered>
+                    <StyledButton className="br5-p9-btn" cl={tc[1]} b={`2px solid ${tc[2]}`} w="100%" hb={tc[2]}
+                        text="Apply" click={() => alert(input)} />
+                </Centered>
+            </ColumnFlex>
+        </Centered>
+    )
+}
+
+export { QuestionRouter, QuestionDashboard, QuestionDetail, QuestionCollectionDetail };

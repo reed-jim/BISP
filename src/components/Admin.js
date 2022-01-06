@@ -5,7 +5,7 @@ import { br_5, CenteredFlex, Flex, YCenteredRowFlex, Centered, p_9, py_9, mb_5, 
 import { addFeed } from "../services/feed";
 
 const webFieldNames = ['title', 'short', 'img', 'src', 'category', 'sub-category'];
-const dropItems = [null, null, null, null, ['category','t1','t2','t2'], ['category','t1','t2']];
+const dropItems = [null, null, null, null, ['category', 't1', 't2', 't2'], ['category', 't1', 't2']];
 
 
 
@@ -13,10 +13,10 @@ const Admin = () => {
     const [isModal, open] = useState(false);
 
     return (
-        <Flex bg="linear-gradient(#ddd, #ccc)" mh='100vh'>            
-           <StyledButton bg="#888" cl="#fff" br={br_5} w="80px" h="40px" m={mr_9} text="Add" click={()=>open(true)} />       
+        <Flex bg="linear-gradient(#ddd, #ccc)" mh='100vh'>
+            <StyledButton bg="#888" cl="#fff" br={br_5} w="80px" h="40px" m={mr_9} text="Add" click={() => open(true)} />
 
-            {isModal && <AddModal fieldNames={webFieldNames} add={'addWeb'} click={()=>open(false)} />}
+            {isModal && <AddModal fieldNames={webFieldNames} add={'addWeb'} click={() => open(false)} />}
         </Flex>
     )
 }
@@ -27,7 +27,7 @@ const AddModal = (props) => {
 
     const initialFieldState = {};
 
-    for(let i = 0; i < fieldNames.length; i++) {
+    for (let i = 0; i < fieldNames.length; i++) {
         const fieldName = fieldNames[i];
         initialFieldState[fieldName] = '';
     }
@@ -36,16 +36,21 @@ const AddModal = (props) => {
 
     const handleChanged = [];
 
-    for(let i=0;i<fieldNames.length;i++) {
+    for (let i = 0; i < fieldNames.length; i++) {
         handleChanged[i] = e => {
             setFields(
                 {
                     ...fields,
-                    [fieldNames[i]] : e.target.value
+                    [fieldNames[i]]: e.target.value
                 }
-            )          
-        } 
+            )
+        }
     }
+
+    const submit = () => {
+
+    }
+
     // show preview Image
     return (
         <CenteredFlex pos="absolute" bg="#00000080" w='100%' h="fit-content" mh='100vh' z={1}>
@@ -59,21 +64,21 @@ const AddModal = (props) => {
                 {
                     fieldNames.map(
                         (field, i) => (
-                            dropItems[i]==null ?
-                            <InputArea key={i} name={field} img={'copy'} ph={"Enter "+field} change={handleChanged[i]} 
-                                bb='1px solid #34489d'
-                            />
-                            :
-                            <DropDownInput key={i} name={field} img={'copy'} ph={"Enter "+field} change={handleChanged[i]} 
-                                bb='1px solid #34489d'
-                                dropItems={dropItems[i]}
-                            />
+                            dropItems[i] == null ?
+                                <InputArea key={i} name={field} img={'copy'} ph={"Enter " + field} change={handleChanged[i]}
+                                    bb='1px solid #34489d'
+                                />
+                                :
+                                <DropDownInput key={i} name={field} img={'copy'} ph={"Enter " + field} change={handleChanged[i]}
+                                    bb='1px solid #34489d'
+                                    dropItems={dropItems[i]}
+                                />
                         )
                     )
                 }
-                                        
-                <StyledButton bg="#34489d" cl="#fff" br={br_5} h="34px" hc='#ccc' name="Add"                  
-                    click={()=>props.add({...fields})}
+
+                <StyledButton bg="#34489d" cl="#fff" br={br_5} h="34px" hc='#ccc' name="Add"
+                    click={() => props.add({ ...fields })}
                 />
 
             </Flex>
@@ -111,7 +116,7 @@ export const DropDownInput = (props) => {
         <Flex dir="column" pos='relative' bb={props.bb} m={mb_18}>
             <StyledText m={mb_5}>{props.name}</StyledText>
 
-            <YCenteredRowFlex bg="#ddd" p={py_9} onClick={()=>drop(!isDrop)}>
+            <YCenteredRowFlex bg="#ddd" p={py_9} onClick={() => drop(!isDrop)}>
                 <input type={props.inputType} placeholder={text} onChange={props.change}
                     style={{
                         backgroundColor: 'transparent',
@@ -123,7 +128,7 @@ export const DropDownInput = (props) => {
                 />
             </YCenteredRowFlex>
 
-            <DropDown items={dropItems} isOpen={isDrop} change={item=>change(item)} />
+            <DropDown items={dropItems} isOpen={isDrop} change={item => change(item)} />
         </Flex>
     )
 }
@@ -133,14 +138,14 @@ const DropDown = (props) => {
     const isOpen = props.isOpen;
 
     return (
-        <Flex dir='column' pos='' cl='#fff' br={br_5} w='100%' h={isOpen? '144px':'0'} z={1}
-        
-        style={{margin: isOpen?'9px 0 9px 0':'', transition: 'all 0.3s', overflow: 'auto'}}>
-            {   
+        <Flex dir='column' pos='' cl='#fff' br={br_5} w='100%' h={isOpen ? '144px' : '0'} z={1}
+
+            style={{ margin: isOpen ? '9px 0 9px 0' : '', transition: 'all 0.3s', overflow: 'auto' }}>
+            {
                 items.map(
                     (item, i) => (
                         <Flex key={i} w='100%'>
-                            <Centered bg='#222' w='100%' h='30px' p={p_9} hBg='#444' onClick={()=>props.change(item)}>
+                            <Centered bg='#222' w='100%' h='30px' p={p_9} hBg='#444' onClick={() => props.change(item)}>
                                 <Text name={item} />
                             </Centered>
                         </Flex>
