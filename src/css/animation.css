@@ -28,5 +28,6 @@
 }
 
 .feed-row:hover {
+    width: 100%;
     margin-left: -36px;
 }

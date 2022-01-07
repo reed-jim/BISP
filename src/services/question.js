@@ -1,6 +1,5 @@
 import axios from "axios"
-
-const apiUrl = 'http://localhost:8080/';
+import { apiUrl } from "./config"
 
 const addQuestionCollection = (data) => {
     axios.post(apiUrl + 'question-collection/add', data)

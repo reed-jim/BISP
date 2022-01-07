@@ -106,8 +106,6 @@ const gradientPropeties = () => {
         }
     }
 
-    console.log(start, step);
-
     return { start: start, step: step }
 }
 

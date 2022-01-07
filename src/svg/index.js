@@ -393,7 +393,30 @@ const FriendIcon = props => {
     )
 }
 
+const EnterIcon = props => {
+    return (
+        <svg
+            version="1.0" xmlns="http://www.w3.org/2000/svg"
+            width="0" height="0"
+            preserveAspectRatio="xMidYMid meet"
+        >
+            <defs>
+                <clipPath id="enter">
+                    <path
+                        transform={`translate(0.000000,${512 * props.scale * 10}) scale(${props.scale},-${props.scale})`}
+                        d="M3535 3821 c-104 -47 -153 -175 -106 -276 13 -26 143 -163 380 -400
+199 -198 361 -363 361 -367 0 -5 -857 -8 -1903 -8 l-1904 0 -44 -23 c-68 -36
+-103 -93 -107 -175 -4 -81 21 -138 81 -186 l39 -31 1919 -3 c1055 -1 1919 -6
+1919 -10 0 -4 -164 -171 -365 -372 -394 -394 -403 -405 -393 -494 7 -60 50
+-130 100 -163 56 -37 148 -44 204 -15 50 26 1145 1124 1170 1172 24 49 23 134
+-4 185 -30 59 -1126 1150 -1174 1170 -50 20 -124 19 -173 -4z"/>
+                </clipPath>
+            </defs>
+        </svg>
+    )
+}
+
 export {
     SortIcon, TrophyIcon, CloseIcon, GemIcon, CheckIcon, SearchIcon, CopyIcon, BackIcon, EditIcon,
-    KnowledgeIcon, FriendIcon
+    KnowledgeIcon, FriendIcon, EnterIcon
 }

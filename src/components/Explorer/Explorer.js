@@ -17,7 +17,7 @@ import { Centered, CenteredFlex, ColumnFlex, Flex, ml_9, m_l_a, StyledImage, Sty
 
 const themeCollections = {
     light: {
-        explorer: ["#fff", "#222"],
+        explorer: ["#fff", "#222", "#ddd", "#ccc", "#777", "#ff1a1a"],
         post: ["#ddd", "#222", "#999", "#aaa", "#ccc", "#999"],
         questionCollection: ["#ddd", "#333", "#222", "#bbb", "#bbb"],
         questionCollectionDetail: ["#ddd"],
@@ -31,7 +31,7 @@ const themeCollections = {
         friendDetail: ["#ccc", "#333", "#777", "#aaa", "#999"]
     },
     dark: {
-        explorer: ["#333", "#fff"],
+        explorer: ["#333", "#fff", "#444", "#555", "#999", "#ff9999"],
         post: ["#444", "#fff", "#888", "#555", "#333", "#666"],
         questionCollection: ["#444", "#fff", "#ddd", "#666", "#666"],
         questionCollectionDetail: ["#444"],
@@ -343,12 +343,14 @@ const Explorer = (props) => {
                 {/* <Left applySort={applyQuery} applySearch={applyQuery} theme={props.theme} /> */}
                 {/* Knowledge */}
                 <ColumnFlex pos="" w="50%" g="18px">
-                    <ColumnFlex b="2px solid #444" br="5px" p="18px" g="18px">
-                        <Text text={`Hello, ${getSessionStorage("user") != undefined ? getSessionStorage("user").name : ""}`} />
+                    <ColumnFlex b={`2px solid ${tc[4]}`} br="5px" p="18px" g="18px">
+                        <Text cl={tc[1]} fs="20px" text={`Hello, ${getSessionStorage("user") != undefined ? getSessionStorage("user").name : ""}`} />
 
-                        <Text cl="#aaa" text="Have a great day!" />
+                        <Text cl={tc[4]} text="Have a great day!" />
 
-                        <StyledButton bg="#666" br="5px" w="fit-content" p="9px" text="Placeholder Button"
+                        <StyledButton
+                            cl={tc[4]} bg={tc[2]} hb={tc[3]} fs="20px" br="5px" w="fit-content" p="9px" m={m_l_a}
+                            text="Share your knowledge"
                             click={() => openModal()}
                         />
                     </ColumnFlex>
@@ -357,8 +359,8 @@ const Explorer = (props) => {
                     <Text cl={tc[1]} fw="bold" text="Exlore the world" />
 
                     <Text
-                        cl="#ff9999" fw="bold" ta="justify" b="2px solid #ff9999" br="5px" p="9px"
-                        text="we recommend you learn more from the Internet"
+                        cl={tc[5]} fw="bold" ta="justify" b={`2px solid ${tc[5]}`} br="5px" p="9px"
+                        text="We recommend you learn more from the Internet"
                     />
 
                     <ColumnFlex ref={el => tRef.current["container"] = el} className="hide-scrollbar" g="36px" o="auto">

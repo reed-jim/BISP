@@ -11,6 +11,7 @@ import { DropDown } from "./components/Frame";
 import { ThemeProvider } from "styled-components";
 import { darkTheme } from "./components/style/theme";
 import { UserRouter, QuestionCollectionManager } from "./components/User/User";
+import { Landing } from "./components/Landing/Landing";
 
 export const App = () => {
     const [theme, setTheme] = useState("dark");
@@ -21,6 +22,10 @@ export const App = () => {
                 <Header theme={theme} setTheme={setTheme} />
 
                 <Switch>
+                    <Route path="/">
+                        <Landing theme={theme} />
+                    </Route>
+
                     <Route path="/explore">
                         <ExplorerRouter theme={theme} />
                     </Route>
