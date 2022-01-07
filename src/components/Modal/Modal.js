@@ -102,8 +102,8 @@ const AddModal = (props) => {
     }
 
     return (
-        <CenteredFlex pos="fixed" top="0" left="0" bg="#000000f0" w="100vw" h="100vh" z="1">
-            <XCenteredColumnFlex bg={tc[0]} br="5px" w="50%" h="fit-content" o="hidden">
+        <CenteredFlex pos="fixed" top="0" left="0" bg="#000000f0" w="100vw" h="100vh" p="18px" z="1">
+            <XCenteredColumnFlex bg={tc[0]} br="5px" w="50%" mdw="100%" h="fit-content" o="hidden">
 
                 <CenteredFlex bg={tc[1]} w="100%" p="18px">
                     <Text cl={tc[2]} fs="24px" fw="bold" text="Add new item" />

@@ -91,12 +91,12 @@ const Text = (props) => {
 const TextWithIcon = (props) => {
     return (
         <YCenteredRowFlex bg={props.cbg || "none"} g="9px">
-            <SvgIcon svg={props.svg} cpId={props.id} bg="#fff" w={512} scale={0.05} />
+            <SvgIcon svg={props.svg} cpId={props.id} bg={props.bg} w={512} scale={0.05} />
 
             <Flex
-                bg={props.bg} cl={props.cl} br={props.br}
+                cl={props.cl} br={props.br}
                 w={props.w} p={props.p} m={props.m}
-                style={{ fontSize: props.fs, fontWeight: props.fw, textAlign: props.ta }}
+                style={{ fontFamily: "sans-serif", fontSize: props.fs, fontWeight: props.fw, textAlign: props.ta }}
             >
                 {props.text}
             </Flex>

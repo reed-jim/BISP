@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { changePath, getSessionStorage, setSessionStorage } from "../../js/util";
+import { changePath, getSessionStorage, setSessionStorage, capitalizeFirstLetter } from "../../js/util";
 import { UserService } from "../../services/user";
 import { CenteredText, StyledButton, Text } from "../Frame";
 import { Avatar } from "../Friend/Friend";
@@ -10,7 +10,7 @@ let account = "";
 
 const themeCollections = {
     light: {
-        header: ["#fff", "#222", "#ddd", "#eee"]
+        header: ["#eee", "#222", "#ddd", "#eee"]
 
     },
     dark: {
@@ -22,6 +22,7 @@ const Header = (props) => {
     const [connected, connect] = useState(false);
     const history = useHistory();
 
+    const theme = props.theme;
     const tc = themeCollections[props.theme].header;
 
     useEffect(
@@ -87,16 +88,17 @@ const Header = (props) => {
 
     return (
         <YCenteredRowFlex bg={tc[0]} pos="sticky" top="0" h="50px" z={1}>
-            <CenteredText cl={tc[1]} m="0 18px" text="Placeholder" />
+            <Text cl={tc[1]} m="0 18px" text="BISP" />
 
-            <StyledButton className="br-5-p-9" bg={tc[2]} hb={tc[3]} cl={tc[1]} text="Theme"
-                click={() => props.setTheme(props.theme == "light" ? "dark" : "light")} />
+            <StyledButton className="br-5-p-9" bg={tc[2]} hb={tc[3]} cl={tc[1]} text={theme == "dark" ? "Light Mode" : "Dark Mode"}
+                click={() => props.setTheme(props.theme == "light" ? "dark" : "light")}
+            />
 
             {
                 connected ?
                     <YCenteredRowFlex p="0 9px" m={m_l_a} g="9px"
                         onClick={() => changePath(history, "/user")}
-                    >                     
+                    >
                         <Text cl={tc[1]} fw="bold" text={getSessionStorage("user").key} />
 
                         <Avatar text={getSessionStorage("user").name} />

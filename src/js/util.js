@@ -123,7 +123,11 @@ const gradientColor = (i, start, step) => {
     return c
 }
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export {
     lockScroll, pushPath, appendParam, changePath, setLocalStorage, getLocalStorage, isLocalStorageKeyExist, setSessionStorage,
-    getSessionStorage, isNullOrUndefined, getCurrentDate, convertDate, gradientPropeties, gradientColor
+    getSessionStorage, isNullOrUndefined, getCurrentDate, convertDate, gradientPropeties, gradientColor, capitalizeFirstLetter
 }

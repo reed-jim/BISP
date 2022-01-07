@@ -10,15 +10,19 @@ import { UserService } from "../../services/user";
 import { CloseIcon, GemIcon, SearchIcon } from "../../svg";
 import { SortIcon, TrophyIcon } from "../../svg/index";
 import { tags } from "../../test/SampleData";
-import { Badge, StyledButton, SvgIcon, Text, TextWithIcon } from "../Frame";
+import { Badge, CenteredText, StyledButton, SvgIcon, Text, TextWithIcon } from "../Frame";
 import { Avatar, FriendDetail } from "../Friend/Friend";
 import { AddModal } from "../Modal/Modal";
 import { Centered, CenteredFlex, ColumnFlex, Flex, ml_9, m_l_a, StyledImage, StyledInput, YCenteredRowFlex } from "../style/style";
+import { rankingItems } from "../../test/SampleData";
 
 const themeCollections = {
     light: {
-        explorer: ["#fff", "#222", "#ddd", "#ccc", "#777", "#ff1a1a"],
+        explorer: ["#fff", "#222", "#ddd", "#ccc", "#777", "#ff4141"],
         post: ["#ddd", "#222", "#999", "#aaa", "#ccc", "#999"],
+        ranking: ["#ddd", "#222", "#bbb", "#aaa"],
+        rankingItem: ["#ddd", "#222"],
+        sortEngine: ["#ddd", "#222"],
         questionCollection: ["#ddd", "#333", "#222", "#bbb", "#bbb"],
         questionCollectionDetail: ["#ddd"],
         questionDetail: ["#ddd", "#222", "#777", "#222", "#ccc"],
@@ -33,6 +37,9 @@ const themeCollections = {
     dark: {
         explorer: ["#333", "#fff", "#444", "#555", "#999", "#ff9999"],
         post: ["#444", "#fff", "#888", "#555", "#333", "#666"],
+        ranking: ["#444", "#fff", "#555", "#666"],
+        rankingItem: ["#444", "#aaa"],
+        sortEngine: ["#444", "#fff"],
         questionCollection: ["#444", "#fff", "#ddd", "#666", "#666"],
         questionCollectionDetail: ["#444"],
         questionDetail: ["#444", "#fff", "#666", "#bbb", "#555"],
@@ -57,7 +64,7 @@ const ExplorerRouter = (props) => {
 
 
     return (
-        <Centered pos="absolute" top="0" bg={tc[0]} w="100%" mh="100vh">
+        <Centered bg={tc[0]} w="100%" mh="100vh" p="18px">
 
             <Switch>
                 <Route path="/explore/user">
@@ -101,6 +108,8 @@ const Explorer = (props) => {
                         setSessionStorage("latestFeedPage", 0);
 
                         store("pool", res.data);
+
+                        update(updateTime + 1);
                     }
                 )
             }
@@ -143,34 +152,34 @@ const Explorer = (props) => {
 
 
     const init = () => {
-        const pool = [];
+        // const pool = [];
 
-        for (let i = 0; i < 5; i++) {
-            pool[i] = {
-                _id: 0,
-                title: "Pool " + i,
-                content: ["Real Madrid won 13th C1 trophy on 21/6/2020", "We dump 2.12 billion tons of waste every year"
-                    , "Black hole reflects no light"],
-                userId: 0,
-                userDetail: { 0: { name: "Jonathan" } }
-            }
-        }
+        // for (let i = 0; i < 5; i++) {
+        //     pool[i] = {
+        //         _id: 0,
+        //         title: "Pool " + i,
+        //         content: ["Real Madrid won 13th C1 trophy on 21/6/2020", "We dump 2.12 billion tons of waste every year"
+        //             , "Black hole reflects no light"],
+        //         userId: 0,
+        //         userDetail: { 0: { name: "Jonathan" } }
+        //     }
+        // }
 
-        const reserveBottom = [];
+        // const reserveBottom = [];
 
-        for (let i = 0; i < 1; i++) {
-            reserveBottom[i] = {
-                _id: 0,
-                title: "Reserve " + i,
-                content: ["Real Madrid won 13th C1 trophy on 21/6/2020", "We dump 2.12 billion tons of waste every year"
-                    , "Black hole reflects no light"],
-                userId: 0
-            }
-        }
+        // for (let i = 0; i < 1; i++) {
+        //     reserveBottom[i] = {
+        //         _id: 0,
+        //         title: "Reserve " + i,
+        //         content: ["Real Madrid won 13th C1 trophy on 21/6/2020", "We dump 2.12 billion tons of waste every year"
+        //             , "Black hole reflects no light"],
+        //         userId: 0
+        //     }
+        // }
 
-        store("pool", pool);
-        store("reserveTop", []);
-        store("reserveBottom", reserveBottom);
+        // store("pool", pool);
+        // store("reserveTop", []);
+        // store("reserveBottom", reserveBottom);
     }
 
     const add = (input) => {
@@ -331,19 +340,19 @@ const Explorer = (props) => {
 
 
     return (
-        <ColumnFlex w="80%" g="18px">
-            <Flex bg="#f80" h="250px" p="18px">
-                Coming Soon
+        <ColumnFlex w="100%" g="18px">
+            <Flex bg={tc[2]} br="5px" h="250px" p="18px">
+                <Text cl={tc[1]} fs="20px" fw="bold" text="Coming Soon!" />
                 {/* <StyledRouteLink to="question" text="Click here" bg="#f80" br="5px" /> */}
             </Flex>
             {/* <AddModal theme={theme} /> */}
             {/* <Question theme={theme} /> */}
-            <Flex g="18px" d="">
+            <Flex w="100%" g="18px" style={{flexWrap: "wrap"}}>
                 {/* Entertainment */}
-                {/* <Left applySort={applyQuery} applySearch={applyQuery} theme={props.theme} /> */}
+                <Left applySort={applyQuery} applySearch={applyQuery} theme={props.theme} />
                 {/* Knowledge */}
-                <ColumnFlex pos="" w="50%" g="18px">
-                    <ColumnFlex b={`2px solid ${tc[4]}`} br="5px" p="18px" g="18px">
+                <ColumnFlex pos="" w="50%" mdw="100%" g="18px" gr={1}>
+                    <ColumnFlex b={`2px solid ${tc[2]}`} br="5px" p="18px" g="18px">
                         <Text cl={tc[1]} fs="20px" text={`Hello, ${getSessionStorage("user") != undefined ? getSessionStorage("user").name : ""}`} />
 
                         <Text cl={tc[4]} text="Have a great day!" />
@@ -356,7 +365,7 @@ const Explorer = (props) => {
                     </ColumnFlex>
                     {/* Coming Soon */}
                     {/* Features */}
-                    <Text cl={tc[1]} fw="bold" text="Exlore the world" />
+                    <Text cl={tc[1]} fw="bold" text="Explore the world" />
 
                     <Text
                         cl={tc[5]} fw="bold" ta="justify" b={`2px solid ${tc[5]}`} br="5px" p="9px"
@@ -369,11 +378,9 @@ const Explorer = (props) => {
                         }
                     </ColumnFlex>
 
-                    <Flex h="300px"></Flex>
-
                 </ColumnFlex>
                 {/* Ranking */}
-                {/* <Ranking items={rankingItems} /> */}
+                <Ranking items={rankingItems} theme={theme} />
             </Flex>
 
             {isOpenModal && <AddModal theme={theme} close={() => closeModal()} submit={add} />}
@@ -391,48 +398,48 @@ const Post = (props) => {
     const tc = themeCollections[theme].post;
 
     const giveGem = () => {
-        const user = getSessionStorage("user");
+        // const user = getSessionStorage("user");
 
-        if (user) {
-            let feed = props.feed;
+        // if (user) {
+        //     let feed = props.feed;
 
-            feed.gem++;
+        //     feed.gem++;
 
-            const feeds = getSessionStorage("latestFeed");
+        //     const feeds = getSessionStorage("latestFeed");
 
-            for (const key in feeds) {
-                if (feeds[key]._id == feed._id) {
-                    feeds[key] = feed; break;
-                }
-            }
+        //     for (const key in feeds) {
+        //         if (feeds[key]._id == feed._id) {
+        //             feeds[key] = feed; break;
+        //         }
+        //     }
 
-            setSessionStorage("latestFeed", feeds)
+        //     setSessionStorage("latestFeed", feeds)
 
-            new FeedService().update(feed);
+        //     new FeedService().update(feed);
 
-            const us = new UserService();
+        //     const us = new UserService();
 
-            user.learn += 1 + user.bonus;
-            user.bonus++;
-            user.lastLearnTime = getCurrentDate();
+        //     user.learn += 1 + user.bonus;
+        //     user.bonus++;
+        //     user.lastLearnTime = getCurrentDate();
 
-            setSessionStorage("user", user);
+        //     setSessionStorage("user", user);
 
-            us.update(user);
+        //     us.update(user);
 
-            // update gem for author
+        //     // update gem for author
 
-            // const readHistory = {
-            //     id: getSessionStorage("read_history_last_id"),
-            //     feedId: feed._id,
-            //     userId: user._id
-            // }
+        //     // const readHistory = {
+        //     //     id: getSessionStorage("read_history_last_id"),
+        //     //     feedId: feed._id,
+        //     //     userId: user._id
+        //     // }
 
-            // ReadHistory().add(readHistory);
-        }
-        else {
+        //     // ReadHistory().add(readHistory);
+        // }
+        // else {
 
-        }
+        // }
     }
 
     const viewUser = () => {
@@ -511,37 +518,62 @@ const Bar = (props) => {
 }
 
 const Ranking = (props) => {
+    const [isExpand, expand] = useState(false);
+    const tc = themeCollections[props.theme].ranking;
+
     return (
-        <ColumnFlex bg="#444" br="5px" p="18px" g="9px" gr="1">
-            <TextWithIcon
-                svg={TrophyIcon({ scale: 0.005 })}
-                id="trophy"
-                text="Ranking"
-                style={{ marginBottom: "18px" }}
-            />
+        <ColumnFlex bg={tc[0]} br="5px" h="fit-content" p="18px" g="36px" gr="1">
+            <YCenteredRowFlex style={{ borderBottom: `2px solid ${tc[2]}`, paddingBottom: "18px" }}>
+                <TextWithIcon
+                    svg={GemIcon({ scale: 0.005 })}
+                    id="gem"
+                    text="Ranking"
+                    bg={tc[1]}
+                    cl={tc[1]}
+                    fw="bold"
+                    style={{ marginBottom: "18px" }}
+                />
+
+                <StyledButton className="br-5-p-9" bg={tc[2]} hb={tc[3]} cl={tc[1]} w="fit-content" m={m_l_a}
+                    text={isExpand ? "Hide" : "Show"} click={() => expand(!isExpand)}
+                />
+            </YCenteredRowFlex>
 
             {
-                props.items.map(
-                    (item, i) => <RankingItem key={i} src={item[0]} name={item[1]} />
-                )
+                isExpand &&
+                <ColumnFlex g="9px">
+                    <Text cl={tc[1]} fw="bold" m={m_l_a} text="Gem" />
+                    {
+                        props.items.map(
+                            (item, i) =>
+                                <RankingItem key={i} src={item[0]} name={item[1]} theme={props.theme}
+                                    style={{ borderBottom: `2px solid ${tc[2]}`, paddingBottom: "9px" }}
+                                />
+                        )
+                    }
+                </ColumnFlex>
             }
         </ColumnFlex>
     )
 }
 
 const RankingItem = (props) => {
+    const tc = themeCollections[props.theme].rankingItem;
+
     return (
-        <YCenteredRowFlex bg="none" g="18px">
-            <StyledImage src={props.src} br="50%" w="30px" h="30px" of="cover" />
-            <Text fs="16px" fw="bold" text={props.name} />
-            <Text fs="16px" fw="bold" m="0 0 0 auto" text="999" />
+        <YCenteredRowFlex bg="none" g="9px" style={props.style}>
+            {/* <StyledImage src={props.src} br="50%" w="30px" h="30px" of="cover" /> */}
+
+            <Avatar text={props.name} />
+            <CenteredText cl={tc[1]} fs="16px" text={props.name} />
+            <CenteredText cl={tc[1]} fs="16px" m="0 0 0 auto" text="999" />
         </YCenteredRowFlex>
     )
 }
 
 const Left = (props) => {
     return (
-        <ColumnFlex w="30%" g="18px">
+        <ColumnFlex w="25%" mdw="100%" g="18px" gr={1}>
             {/* Entertainment */}
             <Entertainment />
             {/* Search */}
@@ -566,6 +598,8 @@ const Entertainment = () => {
 const SortEngine = (props) => {
     const [sort, setSort] = useState("Top");
 
+    const tc = themeCollections[props.theme].sortEngine;
+
     const handleSort = (item) => {
         const fs = new FeedService();
 
@@ -587,13 +621,14 @@ const SortEngine = (props) => {
     }
 
     return (
-        <ColumnFlex b="2px solid #444" br="5px" p="18px" g="18px">
+        <ColumnFlex b={`2px solid ${tc[0]}`} br="5px" p="18px" g="18px">
 
             <TextWithIcon
                 svg={SortIcon({ scale: 0.005 })}
                 id="sort"
                 text="Sort Engine"
-                cl="#fff"
+                bg={tc[1]}
+                cl={tc[1]}
             />
 
             <Flex g="9px">
@@ -608,7 +643,7 @@ const SortEngine = (props) => {
                 }
             </Flex>
 
-            <Text cl="#bbb" text="Tags" />
+            <Text cl={tc[1]} text="Search" />
 
             <SearchBar applySearch={props.applySearch} theme={props.theme} />
 

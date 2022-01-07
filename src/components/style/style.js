@@ -39,12 +39,12 @@ const Customizer = styled.div`
         width: ${props => props.lgw};
     }
     @media (max-width: 768px) {
-        display: ${props => props.mdDisplay};
+        display: ${props => props.mdd};
         width: ${props => props.mdw};
     }
     @media (max-width: 576px) {
-        display: ${props => props.smDisplay + ' !important'};
-        width: ${props => props.smWidth};
+        display: ${props => props.smDisplay};
+        width: ${props => props.smw};
     }
     @media (max-width: 768px) {
         ${props => props.mdStyle};

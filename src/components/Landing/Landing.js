@@ -4,34 +4,36 @@ import { useQuery } from "../../hooks/useQuery";
 import { useShowThenHideEffect } from "../../hooks/useShowThenHideEffect";
 import { changePath, getSessionStorage, setSessionStorage } from "../../js/util";
 import { UserService } from "../../services/user";
-import { BackIcon, CopyIcon, EnterIcon } from "../../svg";
+import { BackIcon, CopyIcon, EnterIcon, KnowledgeIcon, GemIcon } from "../../svg";
 import { CenteredText, StyledButton, SvgIcon, Text } from "../Frame";
 import { Status } from "../Question/addQuestion";
 import { Centered, CenteredFlex, ColumnFlex, Flex, m_l_a, StyledImage, XCenteredColumnFlex, YCenteredColumnFlex, YCenteredRowFlex } from "../style/style";
-
+import "../../css/animation.css";
+import { pushPath } from "../../js/util";
 
 const themeCollections = {
     light: {
-        landing: ["#fff", "#222", "#777", "#ccc", "#bbb"],
+        landing: ["#fff", "#222", "#777", "#ccc", "#bbb", "linear-gradient(45deg,#c330ff,#3167ff)"],
         landingItem: ["#ccc", "#222", "#bbb"],
         friendDetail: ["#ccc", "#333", "#777", "#aaa", "#999"]
     },
     dark: {
-        landing: ["#333", "#fff", "#aaa", "#444", "#555"],
+        landing: ["#333", "#fff", "#aaa", "#444", "#555", "linear-gradient(45deg,#c330ff,#3167ff)"],
         friendListItem: ["#555", "#fff", "#666"],
         friendDetail: ["#444", "#fff", "#aaa", "#666", "#555"]
     }
 }
 
 const Landing = (props) => {
+    const history = useHistory();
     const tc = themeCollections[props.theme].landing;
 
     return (
         <Centered bg={tc[0]} w="100%" mh="100vh">
-            <XCenteredColumnFlex bg={tc[0]} w="75%" mh="100vh" p="126px" g="126px">
+            <XCenteredColumnFlex bg={tc[0]} w="70%" mdw="100%" mh="100vh" p="126px 18px 18px 18px" g="126px" tr="width 0.5s">
 
-                <Flex br="5px" w="100%" g="18px" o="hidden" style={{ minHeight: "300px", paddingBottom: "0", borderBottom: `2px solid ${tc[3]}` }}>
-                    <YCenteredColumnFlex w="50%" g="18px">
+                <Flex w="100%" g="0px" o="hidden" style={{ minHeight: "300px", paddingBottom: "0", borderBottom: `3px solid ${tc[3]}` }}>
+                    <YCenteredColumnFlex g="27px" style={{ flexGrow: 1 }}>
                         <CenteredText cl={tc[1]} fs="60px" fw="bold" text="Placeholder" />
 
                         <Text cl={tc[2]} fs="20px" fw="" ta="left" w="100%" text="Explore the beauty of science right now!"
@@ -39,14 +41,15 @@ const Landing = (props) => {
                         />
 
                         <YCenteredRowFlex className="br-5-p-9" bg={tc[3]} hBg={tc[4]} w="fit-content">
-                            <SvgIcon svg={EnterIcon({ scale: 0.005 })} cpId="enter" bg={tc[1]} w={512} scale={0.05} />
+                            <SvgIcon svg={EnterIcon({ scale: 0.008 })} cpId="enter" bg={tc[1]} w={512} scale={0.08} />
 
-                            <StyledButton cl={tc[1]} fs="24px" fw="bold"
-                                w="fit-content" text="Enter App" />
+                            <StyledButton cl={tc[1]} fs="24px" fw="bold" w="fit-content" text="Enter App"
+                                click={() => pushPath(history, "explore")}
+                            />
                         </YCenteredRowFlex>
                     </YCenteredColumnFlex>
 
-                    <Flex bg={tc[3]} w="50%" />
+                    {/* <Flex bg={tc[3]} w="25%" smw="0"  /> */}
                 </Flex>
 
                 {/* How it works */}
@@ -56,16 +59,16 @@ const Landing = (props) => {
                     <ColumnFlex g="18px">
                         {
                             [
-                                ["Easy", "Very easy to understand"],
-                                ["Fast", "Incredible speed"],
-                                ["Fun", "Simple yet Fascinating"]
+                                ["Easy", "Very easy to understand", KnowledgeIcon, "knowledge"],
+                                ["Fast", "Incredible speed", GemIcon, "gem"],
+                                ["Fun", "Simple yet Fascinating", KnowledgeIcon, "knowledge"]
                             ].map(
                                 (item, i) =>
                                     <ColumnFlex key={i} bg={tc[3]} br="5px" p="18px" g="18px" >
-                                        <YCenteredRowFlex m={i % 2 == 0 ? "" : m_l_a} g="18px">
-                                            <SvgIcon svg={CopyIcon({ scale: 0.004 })} cpId="copy" bg={tc[1]} w={512} scale={0.04} />
+                                        <YCenteredRowFlex m={i % 2 == 0 ? "" : m_l_a} g="9px">
+                                            <SvgIcon svg={item[2]({ scale: 0.006 })} cpId={item[3]} bg={tc[1]} w={512} scale={0.06} />
 
-                                            <Text cl={tc[1]} fs="24px" fw="bold" text={item[0]} />
+                                            <CenteredText cl={tc[1]} fs="24px" fw="bold" text={item[0]} />
                                         </YCenteredRowFlex>
 
 
@@ -95,12 +98,25 @@ const Landing = (props) => {
                     </Flex>
                 </ColumnFlex>
 
-                <Centered bg={tc[3]} br="5px" w="100%" h="150px" p="27px">
+                <Flex bg={tc[5]} br="5px" w="100%" h="fit-content" g="18px" o="hidden">
 
-                </Centered>
+                    <ColumnFlex p="18px" g="36px" style={{ flexGrow: 1, maxWidth: "50%", minHeight: "200px" }}>
+                        <Text cl="#fff" fs="20px" ta="justify"
+                            text="❝ A Dyson sphere is a hypothetical megastructure that
+                             completely encompasses a star and captures a large percentage of its power output ❞"
+                            style={{ overflowWrap: "break-word" }}
+                        />
+
+                        <StyledButton className="br-5-p-9" bg="#00000030" hb="#00000050"
+                            cl="#fff" fs="24px" fw="bold" w="fit-content" m="auto 0 0 0" text="Explore Now" />
+                    </ColumnFlex>
+
+                        <StyledImage src="https://cdn.pixabay.com/photo/2018/08/15/13/10/galaxy-3608029__340.jpg" w="50%" />
+                    {/* <Flex bg="#00000030" w="50%" /> */}
+                </Flex>
 
                 <Flex w="100%">
-                    <Text text="© Bisp. All Rights Reserved" />
+                    <Text cl={tc[1]} text="© Bisp. All Rights Reserved" />
                 </Flex>
             </XCenteredColumnFlex>
         </Centered>

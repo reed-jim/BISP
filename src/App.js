@@ -21,11 +21,7 @@ export const App = () => {
             <BrowserRouter>
                 <Header theme={theme} setTheme={setTheme} />
 
-                <Switch>
-                    <Route path="/">
-                        <Landing theme={theme} />
-                    </Route>
-
+                <Switch>                
                     <Route path="/explore">
                         <ExplorerRouter theme={theme} />
                     </Route>
@@ -33,35 +29,21 @@ export const App = () => {
                     <Route path="/question/add">
                         <AddQuestionManager theme={theme} />
                     </Route>
-
-                    {/* <Route path="/question/add/?id=1464&question=5">
-                        <QuestionDetail theme={theme} />
-                    </Route> */}
-
-                    {/* <Route path="/question/:id/:id">
-                        <QuestionDetail theme={theme} />
-                    </Route>
-
-                    <Route path="/question/:id">
-                        <QuestionCollectionDetail theme={theme} />
-                    </Route> */}
-
+                    
                     <Route path="/question">
                         <QuestionRouter theme={theme} />
                     </Route>
-
-
 
                     <Route path="/user">
                         <UserRouter theme={theme} />
                     </Route>
 
-                    <Route exact path="/">
-                        {/* <LandingPage /> */}
-                    </Route>
-
                     <Route exact path="/admin">
                         <Admin />
+                    </Route>
+
+                    <Route path="/">
+                        <Landing theme={theme} />
                     </Route>
                 </Switch>
             </BrowserRouter>

@@ -120,7 +120,7 @@ const FriendDetail = (props) => {
     }
 
     return (
-        <ColumnFlex bg={tc[0]} br="5px" w="50%" p="27px" g="18px">
+        <ColumnFlex bg={tc[0]} br="5px" w="50%" mdw="100%" p="27px" g="18px">
 
             <Text cl={tc[1]} fs="24px" fw="bold" text="Hi, Name" />
 

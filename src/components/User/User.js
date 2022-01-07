@@ -88,7 +88,7 @@ const UserDashboard = (props) => {
     const user = getSessionStorage("user");
 
     return (
-        <ColumnFlex bg={tc[0]} br="5px" w="50%" p="27px" g="18px">
+        <ColumnFlex bg={tc[0]} br="5px" w="50%" lgw="75%" mdw="100%" p="27px" g="18px">
             <YCenteredRowFlex g="9px">
                 <Avatar text={user.name} />
                 <CenteredText cl={tc[1]} fs="24px" fw="bold" text={user.name == "" ? "Click <Customize> to edit profile" : `Hi, ${user.name}`} />
