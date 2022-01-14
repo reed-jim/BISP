@@ -101,7 +101,7 @@ const Landing = (props) => {
                 </ColumnFlex>
 
                 {/* Category */}
-                <ColumnFlex g="18px">
+                <ColumnFlex w="100%" g="18px">
                     <Text cl={bt.text} fs="24px" fw="bold" text="Category" />
 
                     <Flex g="18px" wr="wrap">
