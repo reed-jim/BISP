@@ -10,6 +10,7 @@ import { Status } from "../Question/addQuestion";
 import { Centered, CenteredFlex, ColumnFlex, Flex, m_l_a, StyledImage, XCenteredColumnFlex, YCenteredColumnFlex, YCenteredRowFlex } from "../style/style";
 import "../../css/animation.css";
 import { pushPath } from "../../js/util";
+const basicThemes = require("../../theme/theme.json");
 
 const themeCollections = {
     light: {
@@ -27,6 +28,7 @@ const themeCollections = {
 const Landing = (props) => {
     const history = useHistory();
     const tc = themeCollections[props.theme].landing;
+    const bt = basicThemes[props.theme];
 
     return (
         <Centered bg={tc[0]} w="100%" mh="100vh">
@@ -80,15 +82,15 @@ const Landing = (props) => {
                     </ColumnFlex>
                 </ColumnFlex>
 
-
+                {/* Stat */}
                 <ColumnFlex w="100%" g="18px">
                     <Text cl={tc[1]} fs="24px" fw="bold" text="Explore" />
 
-                    <Flex g="18px">
+                    <Flex g="18px" style={{ flexWrap: "wrap" }}>
                         {
                             ["Lessons", "Works", "Users"].map(
                                 (item, i) =>
-                                    <XCenteredColumnFlex key={i} b={`2px solid ${tc[3]}`} br="5px" p="36px" g="18px" style={{ flexGrow: 1 }}  >
+                                    <XCenteredColumnFlex key={i} b={`2px solid ${tc[3]}`} br="5px" p="18px" g="18px" style={{ flexGrow: 1 }}  >
                                         <Text cl={tc[1]} fs="60px" text={i * 100} />
                                         <Text cl={tc[2]} text={item} />
                                     </XCenteredColumnFlex>
@@ -98,9 +100,33 @@ const Landing = (props) => {
                     </Flex>
                 </ColumnFlex>
 
-                <Flex bg={tc[5]} br="5px" w="100%" h="fit-content" g="18px" o="hidden">
+                {/* Category */}
+                <ColumnFlex g="18px">
+                    <Text cl={bt.text} fs="24px" fw="bold" text="Category" />
 
-                    <ColumnFlex p="18px" g="36px" style={{ flexGrow: 1, maxWidth: "50%", minHeight: "200px" }}>
+                    <Flex g="18px" wr="wrap">
+                        {
+                            [
+                                ["Math", "https://cdn.pixabay.com/photo/2015/11/15/07/47/geometry-1044090__480.jpg"],
+                                ["Physics", "https://cdn.pixabay.com/photo/2018/03/29/19/34/northern-lights-3273425__480.jpg"],
+                                ["Astronomy", "https://cdn.pixabay.com/photo/2019/03/31/07/37/black-hole-4092609__340.jpg"]
+                            ].map(
+                                (item, i) =>
+                                    <Flex key={i} pos="relative" br="5px" h="150px" o="hidden" style={{ flexGrow: 1 }}>
+                                        <StyledImage src={item[1]}
+                                            w="100%" style={{ objectFit: "cover" }} />
+
+                                        <Text bg="#00000070" className="br-5-p-9" text={item[0]}
+                                            style={{ position: "absolute", top: "9px", left: "9px" }} />
+                                    </Flex>
+                            )
+                        }
+                    </Flex>
+                </ColumnFlex>
+
+                {/* Call to Action */}
+                <Flex bg={tc[5]} br="5px" h="fit-content" o="hidden" wr="wrap">
+                    <ColumnFlex w="40%" smw="100%" p="18px" g="60px" style={{ minHeight: "200px" }}>
                         <Text cl="#fff" fs="20px" ta="justify"
                             text="❝ A Dyson sphere is a hypothetical megastructure that
                              completely encompasses a star and captures a large percentage of its power output ❞"
@@ -108,13 +134,17 @@ const Landing = (props) => {
                         />
 
                         <StyledButton className="br-5-p-9" bg="#00000030" hb="#00000050"
-                            cl="#fff" fs="24px" fw="bold" w="fit-content" m="auto 0 0 0" text="Explore Now" />
+                            cl="#fff" fs="24px" fw="bold" w="fit-content" m="auto 0 0 0" text="Explore Now"
+                            click={() => pushPath(history, "explore")}
+                        />
                     </ColumnFlex>
 
-                        <StyledImage src="https://cdn.pixabay.com/photo/2018/08/15/13/10/galaxy-3608029__340.jpg" w="50%" />
-                    {/* <Flex bg="#00000030" w="50%" /> */}
+                    <StyledImage src="https://cdn.pixabay.com/photo/2018/08/15/13/10/galaxy-3608029__340.jpg" w="50%"
+                        style={{ flexGrow: 1 }}
+                    />
                 </Flex>
 
+                {/* Footer */}
                 <Flex w="100%">
                     <Text cl={tc[1]} text="© Bisp. All Rights Reserved" />
                 </Flex>

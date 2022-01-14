@@ -3,18 +3,15 @@ import { useHistory } from "react-router";
 import { Route, Switch } from "react-router-dom/cjs/react-router-dom.min";
 import { useComponentLifetimeStorage } from "../../hooks/useComponentLifetimeStorage";
 import { useHandleInput } from "../../hooks/useHandleInput";
-import { useQuery } from "../../hooks/useQuery";
 import { convertDate, getCurrentDate, getSessionStorage, gradientColor, gradientPropeties, lockScroll, pushPath, setSessionStorage } from "../../js/util";
 import { FeedService } from "../../services/feed";
-import { UserService } from "../../services/user";
-import { CloseIcon, GemIcon, SearchIcon } from "../../svg";
-import { SortIcon, TrophyIcon } from "../../svg/index";
-import { tags } from "../../test/SampleData";
+import { GemIcon, SearchIcon } from "../../svg";
+import { SortIcon } from "../../svg/index";
+import { rankingItems } from "../../test/SampleData";
 import { Badge, CenteredText, StyledButton, SvgIcon, Text, TextWithIcon } from "../Frame";
 import { Avatar, FriendDetail } from "../Friend/Friend";
 import { AddModal } from "../Modal/Modal";
-import { Centered, CenteredFlex, ColumnFlex, Flex, ml_9, m_l_a, StyledImage, StyledInput, YCenteredRowFlex } from "../style/style";
-import { rankingItems } from "../../test/SampleData";
+import { Centered, CenteredFlex, ColumnFlex, Flex, ml_9, m_l_a, StyledInput, YCenteredRowFlex } from "../style/style";
 
 const themeCollections = {
     light: {
@@ -56,16 +53,12 @@ const themeCollections = {
 const FEED_PER_FETCH = 20;
 
 const ExplorerRouter = (props) => {
-    // const history = useHistory();
-    const query = useQuery();
-
     const theme = props.theme;
     const tc = themeCollections[theme].explorer;
 
 
     return (
         <Centered bg={tc[0]} w="100%" mh="100vh" p="18px">
-
             <Switch>
                 <Route path="/explore/user">
                     <FriendDetail theme={theme} />
@@ -75,7 +68,6 @@ const ExplorerRouter = (props) => {
                     <Explorer theme={theme} />
                 </Route>
             </Switch>
-
         </Centered>
     )
 }
@@ -121,7 +113,7 @@ const Explorer = (props) => {
         }, []
     )
 
-    // this is for learning
+    // a problem
     useEffect(
         () => {
             // track() can't be here. Find out why!!!
@@ -343,14 +335,18 @@ const Explorer = (props) => {
         <ColumnFlex w="100%" g="18px">
             <Flex bg={tc[2]} br="5px" h="250px" p="18px">
                 <Text cl={tc[1]} fs="20px" fw="bold" text="Coming Soon!" />
-                {/* <StyledRouteLink to="question" text="Click here" bg="#f80" br="5px" /> */}
             </Flex>
-            {/* <AddModal theme={theme} /> */}
-            {/* <Question theme={theme} /> */}
-            <Flex w="100%" g="18px" style={{flexWrap: "wrap"}}>
+
+            {/* Question */}
+
+            {/* Main */}
+            <Flex w="100%" g="18px" wr="wrap">
                 {/* Entertainment */}
-                <Left applySort={applyQuery} applySearch={applyQuery} theme={props.theme} />
-                {/* Knowledge */}
+
+                {/* Sort, Search, Filter */}
+                <QueryPanel applySort={applyQuery} applySearch={applyQuery} theme={props.theme} />
+
+                {/* Feed */}
                 <ColumnFlex pos="" w="50%" mdw="100%" g="18px" gr={1}>
                     <ColumnFlex b={`2px solid ${tc[2]}`} br="5px" p="18px" g="18px">
                         <Text cl={tc[1]} fs="20px" text={`Hello, ${getSessionStorage("user") != undefined ? getSessionStorage("user").name : ""}`} />
@@ -363,7 +359,6 @@ const Explorer = (props) => {
                             click={() => openModal()}
                         />
                     </ColumnFlex>
-                    {/* Coming Soon */}
                     {/* Features */}
                     <Text cl={tc[1]} fw="bold" text="Explore the world" />
 
@@ -379,10 +374,12 @@ const Explorer = (props) => {
                     </ColumnFlex>
 
                 </ColumnFlex>
+
                 {/* Ranking */}
                 <Ranking items={rankingItems} theme={theme} />
             </Flex>
 
+            {/* Modal */}
             {isOpenModal && <AddModal theme={theme} close={() => closeModal()} submit={add} />}
 
             {isRewardModal && <Gift theme={theme} close={() => openRewardModal(false)} />}
@@ -571,7 +568,7 @@ const RankingItem = (props) => {
     )
 }
 
-const Left = (props) => {
+const QueryPanel = (props) => {
     return (
         <ColumnFlex w="25%" mdw="100%" g="18px" gr={1}>
             {/* Entertainment */}
@@ -685,7 +682,6 @@ const SearchBar = (props) => {
 
     return (
         <YCenteredRowFlex className="br-5-p-9" bg={tc[0]} g="9px">
-            {/* <SvgIcon svg={GemIcon({ scale: 0.0035 })} cpId="gem" bg="#fff" w={512} scale={0.035} /> */}
             <StyledInput cl={tc[1]} b="0" w="70%" placeholder="seach tag..."
                 onChange={e => getInput("q", e.target.value)}
             />
@@ -721,4 +717,4 @@ const Gift = (props) => {
     )
 }
 
-export { ExplorerRouter, Explorer, SearchBar, Post }
+export { ExplorerRouter, Explorer, SearchBar, Post };

@@ -5,19 +5,17 @@ import "../../css/style.css";
 import { useComponentLifetimeStorage } from "../../hooks/useComponentLifetimeStorage";
 import { useHandleInput } from "../../hooks/useHandleInput";
 import { useQuery } from "../../hooks/useQuery";
+import { useShowThenHideEffect } from "../../hooks/useShowThenHideEffect";
 import { changePath, getSessionStorage, lockScroll, pushPath, setSessionStorage } from "../../js/util";
 import { FeedService } from "../../services/feed";
 import { UserService } from "../../services/user";
+import { EditIcon, FriendIcon, KnowledgeIcon } from "../../svg";
 import { Post, SearchBar } from "../Explorer/Explorer";
-import { CenteredText, StyledButton, Text } from "../Frame";
-import { FriendDetail, FriendList } from "../Friend/Friend";
+import { CenteredText, StyledButton, SvgIcon, Text } from "../Frame";
+import { Avatar, FriendDetail, FriendList } from "../Friend/Friend";
 import { AddModal } from "../Modal/Modal";
-import { Centered, ColumnFlex, Flex, m_l_a, StyledInput, YCenteredRowFlex } from "../style/style";
 import { Status } from "../Question/addQuestion";
-import { useShowThenHideEffect } from "../../hooks/useShowThenHideEffect";
-import { Avatar } from "../Friend/Friend";
-import { EditIcon, KnowledgeIcon, FriendIcon } from "../../svg";
-import { SvgIcon } from "../Frame";
+import { Centered, ColumnFlex, Flex, m_l_a, StyledInput, YCenteredRowFlex } from "../style/style";
 
 const themeCollections = {
     light: {
@@ -324,21 +322,5 @@ const Customize = (props) => {
         </ColumnFlex>
     )
 }
-
-// const Task = (props) => {
-//     const [selected, select] = useState(-1);
-//     const { input, getInput } = useHandleInput({});
-
-//     const tc = themeCollections[props.theme];
-
-//     return (
-//         <ColumnFlex bg="#555" br="5px" w="40%" p="18px" g="18px">
-//             <Text text="Task" />
-
-
-
-//         </ColumnFlex>
-//     )
-// }
 
 export { UserRouter, QuestionCollectionManager };

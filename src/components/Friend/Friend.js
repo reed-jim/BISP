@@ -120,9 +120,13 @@ const FriendDetail = (props) => {
     }
 
     return (
-        <ColumnFlex bg={tc[0]} br="5px" w="50%" mdw="100%" p="27px" g="18px">
+        <ColumnFlex bg={tc[0]} br="5px" w="50%" lgw="75%" mdw="100%" p="27px" g="18px">
 
-            <Text cl={tc[1]} fs="24px" fw="bold" text="Hi, Name" />
+            <YCenteredRowFlex g="9px">
+                <Avatar text={getUser().name} />
+                <Text cl={tc[1]} fs="24px" fw="bold" text={getUser().name} />
+            </YCenteredRowFlex>
+
 
             <Text cl={tc[2]} text="Placeholder" />
 
@@ -150,7 +154,10 @@ const FriendDetail = (props) => {
 
             <Flex g="9px">
                 <Status status="Friend Added!" isShow={saveStatusDisplayer.isShow} />
-                <StyledButton className="br-5-p-9" bg={tc[2]} cl={tc[1]} w="fit-content" m={m_l_a} text="Add" click={addFriend} />
+
+                <StyledButton className="br-5-p-9" bg={tc[4]} hb={tc[3]} cl={tc[1]} w="fit-content" m={m_l_a} text="Add Friend"
+                    click={addFriend}
+                />
             </Flex>
 
         </ColumnFlex>

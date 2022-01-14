@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { CenteredFlex, BasicButton, StyledText, StyledImage, Centered, YCenteredRowFlex, Flex, ColumnFlex } from "./style/style";
-import { br_5, px_9 } from "./style/style";
-
-import { useCustomTheme } from "../hooks/useTheme";
-
+import {
+    BasicButton, br_5, Centered, CenteredFlex, ColumnFlex, Flex, px_9, StyledImage, StyledText,
+    YCenteredRowFlex
+} from "./style/style";
 
 const StyledButton = (props) => {
     return (
@@ -153,4 +152,5 @@ const CenteredText = (props) => {
     )
 }
 
-export { StyledButton, IconButton, Badge, StyledRouteLink, SvgIcon, Text, CenteredText, TextWithIcon, DropDown }
+export { StyledButton, IconButton, Badge, StyledRouteLink, SvgIcon, Text, CenteredText, TextWithIcon, DropDown };
+
